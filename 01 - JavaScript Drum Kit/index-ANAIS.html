@@ -58,23 +58,24 @@
 
     <script>
       window.addEventListener('keydown', (e) => {
-        playAudioByKeyCode(e.keyCode)
-        addClassByKeyCode(e.keyCode)
-      })
+        playAudioByKeyCode(e.keyCode);
+        addClassByKeyCode(e.keyCode);
+      });
 
       function playAudioByKeyCode(keyCode) {
-        const audio = document.querySelector(`audio[data-key="${keyCode}"]`)
-        if (audio) audio.play()
+        const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+        if (!audio) return;
+        audio.currentTime = 0;
+        audio.play();
       }
 
       function addClassByKeyCode(keyCode) {
-        const key = document.querySelector(`.key[data-key="${keyCode}"]`)
-        if (key) {
-          key.classList.add('playing')
-          setTimeout(() => {
-            key.classList.remove('playing')
-          }, 50)
-        }
+        const key = document.querySelector(`.key[data-key="${keyCode}"]`);
+        if (!key) return;
+        key.classList.add('playing')
+        setTimeout(() => {
+          key.classList.remove('playing')
+        }, 50)
       }
     </script>
   </body>
