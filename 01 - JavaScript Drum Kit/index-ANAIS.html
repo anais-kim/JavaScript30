@@ -72,11 +72,16 @@
       function addClassByKeyCode(keyCode) {
         const key = document.querySelector(`.key[data-key="${keyCode}"]`);
         if (!key) return;
-        key.classList.add('playing')
-        setTimeout(() => {
-          key.classList.remove('playing')
-        }, 50)
+        key.classList.add('playing');
       }
+
+      function removeTransition(e) {
+        if (e.propertyName !== 'transform') return;
+        this.classList.remove('playing');
+      }
+
+      const keys = document.querySelectorAll('.key');
+      keys.forEach(k => k.addEventListener('transitionend', removeTransition));
     </script>
   </body>
 </html>
