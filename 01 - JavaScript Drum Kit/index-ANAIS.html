@@ -60,17 +60,15 @@
       window.addEventListener('keydown', (e) => {
         playAudioByKeyCode(e.keyCode)
         addClassByKeyCode(e.keyCode)
-      }, false)
+      })
 
       function playAudioByKeyCode(keyCode) {
-        const audios = [...document.getElementsByTagName('audio')]
-        const audio = audios.find(a => parseInt(a.dataset.key) === keyCode)
+        const audio = document.querySelector(`audio[data-key="${keyCode}"]`)
         if (audio) audio.play()
       }
 
       function addClassByKeyCode(keyCode) {
-        const keys = [...document.getElementsByClassName('key')]
-        const key = keys.find((k) => parseInt(k.dataset.key) === keyCode)
+        const key = document.querySelector(`.key[data-key="${keyCode}"]`)
         if (key) {
           key.classList.add('playing')
           setTimeout(() => {
