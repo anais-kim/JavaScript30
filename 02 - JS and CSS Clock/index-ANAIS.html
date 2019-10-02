@@ -70,26 +70,28 @@
   </style>
     
   <script>
-
-    const DEFAULT_DEGREE = 90;
     const hourHand = document.querySelector('.hour-hand');
     const minHand = document.querySelector('.min-hand');
     const secondHand = document.querySelector('.second-hand');
 
-    showTime()
-    setInterval(showTime, 1000)
-
-    function showTime() {
+    function setDate() {
       const now = new Date();
-      const hour = DEFAULT_DEGREE + now.getHours() * 360/12 + now.getMinutes() * 360/12/60;
-      const min = DEFAULT_DEGREE + now.getMinutes() * 360/60 + now.getSeconds() * 360/60/60;
-      const second = DEFAULT_DEGREE + now.getSeconds() * 360/60;
+      const hours = now.getHours();
+      const mins = now.getMinutes();
+      const seconds = now.getSeconds();
 
-      hourHand.style.transform = `rotate(${hour}deg)`;
-      minHand.style.transform = `rotate(${min}deg)`;
-      secondHand.style.transform = `rotate(${second}deg)`;
+      const DEFAULT_DEGREE = 90;
+      const hoursDegree = ((hours/12) * 360) + ((mins/60) * (360/12)) + DEFAULT_DEGREE;
+      const minsDegree = ((mins/60) * 360) + ((seconds/60) * (360/60)) + DEFAULT_DEGREE;
+      const secondsDegree = ((seconds/60) * 360) + DEFAULT_DEGREE;
+
+      hourHand.style.transform = `rotate(${hoursDegree}deg)`;
+      minHand.style.transform = `rotate(${minsDegree}deg)`;
+      secondHand.style.transform = `rotate(${secondsDegree}deg)`;
     }
 
+    setDate()
+    setInterval(setDate, 1000)
   </script>
 </body>
 </html>
