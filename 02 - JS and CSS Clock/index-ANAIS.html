@@ -52,17 +52,17 @@
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      transform: translateX(-3px);
     }
 
     .hand {
-      width: 50%;
-      height: 6px;
-      background: black;
       position: absolute;
-      top: 50%;
-      transform-origin: 100%;
-      transform: rotate(90deg);
+      width: 6px;
+      height: 50%;
+      background: black;
+      top: 0;
+      left: 50%;
+      transform-origin: bottom;
       transition: all .05s;
       transition-timing-function: cubic-bezier(0.25, 0.02, 0.75, 2.16);
     }
@@ -80,10 +80,9 @@
       const mins = now.getMinutes();
       const seconds = now.getSeconds();
 
-      const DEFAULT_DEGREE = 90;
-      const hoursDegree = ((hours/12) * 360) + ((mins/60) * (360/12)) + DEFAULT_DEGREE;
-      const minsDegree = ((mins/60) * 360) + ((seconds/60) * (360/60)) + DEFAULT_DEGREE;
-      const secondsDegree = ((seconds/60) * 360) + DEFAULT_DEGREE;
+      const hoursDegree = ((hours/12) * 360) + ((mins/60) * (360/12));
+      const minsDegree = ((mins/60) * 360) + ((seconds/60) * (360/60));
+      const secondsDegree = (seconds/60) * 360;
 
       hourHand.style.transform = `rotate(${hoursDegree}deg)`;
       minHand.style.transform = `rotate(${minsDegree}deg)`;
