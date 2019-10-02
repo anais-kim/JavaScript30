@@ -56,26 +56,13 @@
     </style>
 
     <script>
-        const spacingInput = document.getElementById('spacing');
-        const blurInput = document.getElementById('blur');
-        const baseInput = document.getElementById('base');
-
-        spacingInput.addEventListener('change', setSpacing);
-        blurInput.addEventListener('change', setBlur);
-        baseInput.addEventListener('change', setBase);
-
-        function setSpacing(e) {
-            const spacing = `${this.value}${this.dataset.sizing}`;
-            document.documentElement.style.setProperty('--spacing', spacing);
-        }
+        const controls = document.querySelectorAll('.controls input');
         
-        function setBlur(e) {
-            const blur = `${this.value}${this.dataset.sizing}`;
-            document.documentElement.style.setProperty('--blur', blur);
-        }
-        function setBase(e) {
-            const base = this.value;
-            document.documentElement.style.setProperty('--base', base);
+        controls.forEach(c => c.addEventListener('change', setProperty));
+
+        function setProperty(e) {
+            const value = `${this.value}${this.dataset.sizing || ''}`;
+            document.documentElement.style.setProperty(`--${this.name}`, value);
         }
     </script>
 </body>
