@@ -57,13 +57,14 @@
 
     <script>
         const controls = document.querySelectorAll('.controls input');
-        
-        controls.forEach(c => c.addEventListener('change', setProperty));
 
-        function setProperty(e) {
-            const value = `${this.value}${this.dataset.sizing || ''}`;
-            document.documentElement.style.setProperty(`--${this.name}`, value);
+        function handleUpdate(e) {
+            const suffix = this.dataset.sizing || '';
+            document.documentElement.style.setProperty(`--${this.name}`, `${this.value}${suffix}`);
         }
+        
+        controls.forEach(c => c.addEventListener('change', handleUpdate));
+        controls.forEach(c => c.addEventListener('mousemove', handleUpdate));
     </script>
 </body>
 </html>
