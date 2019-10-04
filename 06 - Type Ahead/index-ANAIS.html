@@ -22,30 +22,32 @@ fetch(endpoint)
   .then(response => response.json())
   .then(data => cities.push(...data));
 
-function updateSuggestions(e) {
+function updateSuggestions() {
   const keyword = this.value;
   const regex = new RegExp(keyword, 'i');
 
-  suggestions.innerHTML = '';
-
-  cities
+  const html = cities
     .filter(({city, state}) => city.match(regex) || state.match(regex))
-    .forEach(({city, state, population}) => {
+    .map(({city, state, population}) => {
       const fullname = `${city}, ${state}`;
       const highlighted = fullname.replace(regex, `<mark class="hl">${keyword}</mark>`);
       const formatted = parseInt(population).toLocaleString();
   
-      suggestions.innerHTML += `
+      return `
         <li>
           <span>${highlighted}</span>
           <span class="population">${formatted}</span>
-        </li>`;
-    });
+        </li>
+        `;
+    }).join('');
+
+    suggestions.innerHTML = html;
 }
 
 const suggestions = document.querySelector('.suggestions');
 const searchInput = document.querySelector('.search');
 
+searchInput.addEventListener('change', updateSuggestions);
 searchInput.addEventListener('keyup', updateSuggestions);
 </script>
 </body>
