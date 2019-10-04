@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw"></canvas>
+<script>
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+ 
+  let isDrawing = false;
+  let lastP = {x: 0, y: 0};
+  let colorIndex = 0;
+  let widthIndex = 0;
+  const colors = createGradientColors();
+  const widths = createVariousNumbers();
+
+  function draw({x, y}) {
+    if (!isDrawing) return;
+
+    ctx.lineWidth = widths[widthIndex++] || widths[widthIndex = 0];
+    ctx.strokeStyle = colors[colorIndex++] || colors[colorIndex = 0];
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.beginPath();
+    ctx.moveTo(lastP.x, lastP.y);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    lastP = {x, y};
+  }
+
+  canvas.addEventListener('mousedown', ({x, y}) => {
+    isDrawing = true;
+    lastP = {x, y};
+  });
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mousemove', draw);
+
+  function createGradientColors() {
+    const colorArray = [];
+    for (let i = 0; i <= 255; i+=5) {
+      colorArray.push(`rgb(255, ${i}, 0)`);
+    }
+    for (let i = 255; i >= 0; i-=5) {
+      colorArray.push(`rgb(${i}, 255, 0)`);
+    }
+    for (let i = 0; i <= 255; i+=5) {
+      colorArray.push(`rgb(0, 255, ${i})`);
+    }
+    for (let i = 255; i >= 0; i-=5) {
+      colorArray.push(`rgb(0, ${i}, 255)`);
+    }
+    for (let i = 0; i <= 255; i+=5) {
+      colorArray.push(`rgb(${i}, 0, 255)`);
+    }
+    for (let i = 255; i >= 0; i-=5) {
+      colorArray.push(`rgb(255, 0, ${i})`);
+    }
+    return colorArray;
+  }
+
+  function createVariousNumbers() {
+    return [
+      ...Array.from({length: 100}, (v, i) => 100 - i),
+      ...Array.from({length: 100}, (v, i) => i + 1)
+    ];
+  }
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
