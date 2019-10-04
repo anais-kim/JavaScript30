@@ -24,14 +24,15 @@ fetch(endpoint)
 
 function updateSuggestions(e) {
   const keyword = this.value;
-  const searchExp = new RegExp(keyword, 'i');
+  const regex = new RegExp(keyword, 'i');
 
   suggestions.innerHTML = '';
 
   cities
-    .filter(({city}) => searchExp.test(city))
-    .forEach(({city, population}) => {
-      const highlighted = city.replace(searchExp, `<mark class="hl">${keyword}</mark>`);
+    .filter(({city, state}) => city.match(regex) || state.match(regex))
+    .forEach(({city, state, population}) => {
+      const fullname = `${city}, ${state}`;
+      const highlighted = fullname.replace(regex, `<mark class="hl">${keyword}</mark>`);
       const formatted = parseInt(population).toLocaleString();
   
       suggestions.innerHTML += `
