@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+const cities = [];
+fetch(endpoint)
+  .then(response => response.json())
+  .then(data => cities.push(...data));
+
+function updateSuggestions(e) {
+  const keyword = this.value;
+  const searchExp = new RegExp(keyword, 'i');
+
+  suggestions.innerHTML = '';
+
+  cities
+    .filter(({city}) => searchExp.test(city))
+    .forEach(({city, population}) => {
+      const highlighted = city.replace(searchExp, `<mark class="hl">${keyword}</mark>`);
+      const formatted = parseInt(population).toLocaleString();
+  
+      suggestions.innerHTML += `
+        <li>
+          <span>${highlighted}</span>
+          <span class="population">${formatted}</span>
+        </li>`;
+    });
+}
+
+const suggestions = document.querySelector('.suggestions');
+const searchInput = document.querySelector('.search');
+
+searchInput.addEventListener('keyup', updateSuggestions);
+</script>
+</body>
+</html>
