@@ -16,27 +16,32 @@
   </form>
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
-
 const cities = [];
+
 fetch(endpoint)
   .then(response => response.json())
   .then(data => cities.push(...data));
 
-function updateSuggestions() {
-  const keyword = this.value;
-  const regex = new RegExp(keyword, 'i');
+function findMatches(keyword, cities) {
+  const regex = new RegExp(keyword, 'gi');
+  return cities.filter(({city, state}) => city.match(regex) || state.match(regex));
+}  
 
-  const html = cities
-    .filter(({city, state}) => city.match(regex) || state.match(regex))
+function toNumberWithCommas(str) {
+  return parseInt(str).toLocaleString();
+}
+
+function updateSuggestions() {
+  const html = findMatches(this.value, cities)
     .map(({city, state, population}) => {
-      const fullname = `${city}, ${state}`;
-      const highlighted = fullname.replace(regex, `<mark class="hl">${keyword}</mark>`);
-      const formatted = parseInt(population).toLocaleString();
+      const name = `${city}, ${state}`;
+      const regex = new RegExp(this.value, 'gi');
+      const highlightedName = name.replace(regex, `<mark class="hl">${this.value}</mark>`);
   
       return `
         <li>
-          <span>${highlighted}</span>
-          <span class="population">${formatted}</span>
+          <span class="name">${highlightedName}</span>
+          <span class="population">${toNumberWithCommas(population)}</span>
         </li>
         `;
     }).join('');
