@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+    const p = document.querySelector('p');
+
+    function makeGreen() {
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    console.log('Hi this is regular console log');
+    
+    // Interpolated
+    console.log('I am %s', 'Anais');
+
+    // Styled
+    console.log('%c This is blue text', 'font-size: 20px; color: blue');
+
+    // warning!
+    console.warn('WANRNIG');
+
+    // Error :|
+    console.error('SHIT');
+    
+    // Info
+    console.info('This is information I wanted to tell you');
+
+    // Testing
+    console.assert(p.classList.contains('ang'), 'No, p does not have a class like `ang`');
+
+    // clearing
+    console.clear();
+
+    // Viewing DOM Elements
+    console.log(p);
+    console.dir(p);
+
+    // Grouping together
+    dogs.forEach(dog => {
+      console.groupCollapsed(dog.name);
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(dog.name);
+    });
+    
+    // counting
+    console.count('love');
+    console.count('pineapple');
+    console.count('pineapple');
+    console.count('love');
+    console.count('love');
+    console.count('pineapple');
+    console.count('love');
+    console.count('love');
+    console.count('love');
+
+    // timing
+    console.time('fetching data time');
+    fetch('https://api.github.com/users/anais-kim')
+      .then(res => res.json())
+      .then(data => {
+        console.timeEnd('fetching data time');
+        console.log(data);
+      });
+
+  </script>
+</body>
+</html>
