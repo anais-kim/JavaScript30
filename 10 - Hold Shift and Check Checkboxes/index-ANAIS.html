@@ -96,23 +96,26 @@
   </div>
 
 <script>
-  const checkboxes = [...document.querySelectorAll('input[type=checkbox]')];
-  let lastCheckedIndex;
+  const checkboxes = document.querySelectorAll('input[type=checkbox]');
+  let lastChecked;
 
-  function handleClickCheckbox(e) {
-    const index = checkboxes.findIndex(checkbox => checkbox === this);
-
-    if (e.shiftKey) multiCheck(index, lastCheckedIndex, this.checked);
-    lastCheckedIndex = index;
+  function handleCheck(e) {
+    if (e.shiftKey) multiCheck(this, lastChecked, this.checked);
+    lastChecked = this;
   }
 
-  function multiCheck(a = 0, b = 0, isChecked) {
-    for (let i = Math.min(a, b); i <= Math.max(a, b); i++) {
-      checkboxes[i].checked = isChecked;
-    }
+  function multiCheck(a = checkboxes[0], b = checkboxes[0], isChecked) {
+    let inBetween = false;
+    checkboxes.forEach(checkbox => {
+      if (checkbox === a || checkbox === b) {
+        checkbox.checked = isChecked;
+        inBetween = !inBetween;
+      }
+      else if (inBetween) checkbox.checked = isChecked;
+    });
   } 
 
-  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleClickCheckbox));
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
 </script>
 </body>
 </html>
