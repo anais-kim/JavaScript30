@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+    const secretCode = 'anais';
+    const pressed = [];
+
+    function doSomethingAwesome({key}) {
+      pressed.push(key);
+      if (pressed.length > secretCode.length) pressed.splice(0, 1);
+      if (pressed.join('') === secretCode) {
+        cornify_add();
+      }
+    }
+
+    window.addEventListener('keyup', doSomethingAwesome);
+</script>
+</body>
+</html>
