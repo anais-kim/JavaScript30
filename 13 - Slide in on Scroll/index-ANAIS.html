@@ -43,7 +43,7 @@
   </div>
 
   <script>
-    const images = document.querySelectorAll('img.slide-in');
+    const slideImages = document.querySelectorAll('.slide-in');
 
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
@@ -61,17 +61,17 @@
     }
 
 
-    function toggleImages(e) {
-      images.forEach(image => {
-        if (image.y < window.innerHeight - (image.height / 2) && image.y > -image.height) {
-          image.classList.add('active');
-        } else {
-          image.classList.remove('active');
-        }
+    function checkSlide(e) {
+      slideImages.forEach(image => {
+        const isHalfShown = image.y < window.innerHeight - (image.height / 2);
+        const isNotScrolledPast = image.y > -image.height;
+
+        if (isHalfShown && isNotScrolledPast) image.classList.add('active');
+        else image.classList.remove('active');
       });
     }
 
-    document.addEventListener('scroll', debounce(toggleImages));
+    window.addEventListener('scroll', debounce(checkSlide));
   </script>
 
   <style>
