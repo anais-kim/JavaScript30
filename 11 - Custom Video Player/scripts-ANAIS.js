@@ -1,13 +1,10 @@
-const video = document.querySelector('video');
-
-const playButton = document.querySelector('.player__button, .toggle');
-const volumeSlider = document.querySelector('input[name="volume"]');
-const playbackRateSlider = document.querySelector('input[name="playbackRate"]');
-const skipButtons = document.querySelectorAll('.player__button[data-skip]');
-const progressBar = document.querySelector('.progress');
-const progressFilled = document.querySelector('.progress__filled');
-
-let isProgressUpdate;
+const player = document.querySelector('.player');
+const video = player.querySelector('video');
+const toggle = player.querySelector('.toggle');
+const sliders = player.querySelectorAll('.player__slider');
+const skipButtons = player.querySelectorAll('[data-skip]');
+const progress = player.querySelector('.progress');
+const progressBar = player.querySelector('.progress__filled');
 
 async function playVideo() {
     try {
@@ -17,56 +14,48 @@ async function playVideo() {
     }
 }
 
-function handlePlay() {
+function togglePlay() {
     if (video.paused) playVideo();
     else video.pause();
-    
-    playButton.innerHTML = (video.paused)? '►' : '❚ ❚';
 }
 
-function updateVolume() {
-    video.volume = this.value;
+function updateButton() {
+    toggle.textContent = (video.paused)? '►' : '❚ ❚';
 }
 
-function updatePlaybackRate() {
-    video.playbackRate = this.value;
+function handleRangeUpdate() {
+    video[this.name] = this.value;
 }
 
-function handleSkip() {
-    const skip = parseInt(this.dataset.skip);
-    video.currentTime = video.currentTime + skip;
+function skip() {
+    video.currentTime += parseInt(this.dataset.skip);
 }
 
-function updateProgress() {
-    const progress = video.currentTime / video.duration * 100
-    progressFilled.style.flexBasis = `${progress}%`;
+function fillProgressBar() {
+    const progressPercent = video.currentTime / video.duration * 100
+    progressBar.style.flexBasis = `${progressPercent}%`;
 }
 
-function clickProgress(e) {
-    video.currentTime = e.offsetX / this.clientWidth * video.duration;
+function updateProgress(e) {
+    video.currentTime = e.offsetX / progress.offsetWidth * video.duration;
 }
 
-function dragProgress(e) {
-    if (!isProgressUpdate) return;
-    video.currentTime = e.offsetX / this.clientWidth * video.duration;
-}
+video.addEventListener('click', togglePlay);
+video.addEventListener('play', updateButton);
+video.addEventListener('pause', updateButton);
+video.addEventListener('timeupdate', fillProgressBar);
 
-playButton.addEventListener('click', handlePlay);
+toggle.addEventListener('click', togglePlay);
 
-volumeSlider.addEventListener('change', updateVolume);
-volumeSlider.addEventListener('mousemove', updateVolume);
-playbackRateSlider.addEventListener('change', updatePlaybackRate);
-playbackRateSlider.addEventListener('mousemove', updatePlaybackRate);
+sliders.forEach(slider => {
+    slider.addEventListener('change', handleRangeUpdate);
+    slider.addEventListener('mousemove', handleRangeUpdate);
+});
 
-skipButtons.forEach(button => button.addEventListener('click', handleSkip));
+skipButtons.forEach(button => button.addEventListener('click', skip));
 
-video.addEventListener('timeupdate', updateProgress);
-progressBar.addEventListener('click', clickProgress);
-progressBar.addEventListener('mousedown', () => isProgressUpdate = true);
-progressBar.addEventListener('mouseup', () => isProgressUpdate = false);
-progressBar.addEventListener('mousemove', dragProgress);
-
-
-
-    
-
+let mousedown;
+progress.addEventListener('click', updateProgress);
+progress.addEventListener('mousedown', () => mousedown = true);
+progress.addEventListener('mouseup', () => mousedown = false);
+progress.addEventListener('mousemove', (e) => mousedown && updateProgress(e));
