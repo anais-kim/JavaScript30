@@ -28,53 +28,48 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = loadStorage();
-
-  function loadStorage() {
-    const storage = localStorage.getItem('items');
-    return (storage)? JSON.parse(storage) : [];
-  }
-
-  function saveStorage() {
-    localStorage.setItem('items', JSON.stringify(items));
-  }
+  const items = JSON.parse(localStorage.getItem('items')) || [];
 
   function addItem(e) {
     e.preventDefault();
-    
-    const item = this.querySelector('[name=item]');
-    items.push({
-      id: `item-${items.length}`,
-      name: item.value,
+    const name = this.querySelector('[name=item]').value;
+    const item = {
+      name,
       done: false
-    });
-    saveStorage();
+    };
 
-    updateItemsList();
-    item.value = '';
+    items.push(item);
+    updateList(items, itemsList);
+    localStorage.setItem('items', JSON.stringify(items));
+    
+    this.reset();
   }
 
-  function updateItemsList() {
-    const html = items.map(({id, name, done}) => {
-      const checked = done? 'checked' : '';
+  function updateList(items = [], itemsList) {
+    itemsList.innerHTML = items.map((item, i) => {
       return `
           <li>
-            <input id="${id}" type="checkbox" ${checked} onchange="handleCheck(this)"/>
-            <label for="${id}">${name}</label>
+            <input type="checkbox" 
+                   data-index="${i}" 
+                   id="item-${i}" 
+                   ${item.done? 'checked' : ''} 
+                   onchange="toggleDone(this)"
+            />
+            <label for="item-${i}">${item.name}</label>
           </li>
         `;
     }).join('');
-    itemsList.innerHTML = html;
   }
 
-  function handleCheck(input) {
-    const item = items.find(item => item.id == input.id);
+  function toggleDone(input) {
+    const item = items[input.dataset.index];
     item.done = input.checked;
-    saveStorage();
+    localStorage.setItem('items', JSON.stringify(items));
   }
 
-  updateItemsList();
   addItems.addEventListener('submit', addItem);
+  
+  updateList(items, itemsList);
 
 </script>
 
