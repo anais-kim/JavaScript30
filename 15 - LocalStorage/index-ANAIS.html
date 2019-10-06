@@ -53,7 +53,6 @@
                    data-index="${i}" 
                    id="item-${i}" 
                    ${item.done? 'checked' : ''} 
-                   onchange="toggleDone(this)"
             />
             <label for="item-${i}">${item.name}</label>
           </li>
@@ -61,13 +60,15 @@
     }).join('');
   }
 
-  function toggleDone(input) {
-    const item = items[input.dataset.index];
-    item.done = input.checked;
+  function toggleDone({target}) {
+    if (!target.matches('input')) return;
+
+    items[target.dataset.index].done = target.checked;
     localStorage.setItem('items', JSON.stringify(items));
   }
 
   addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
   
   updateList(items, itemsList);
 
