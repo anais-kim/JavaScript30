@@ -36,22 +36,27 @@
 
 <script>
   const wrapper = document.querySelector('.hero');
+  const text = wrapper.querySelector('h1');
 
   function moveTextShadow(e) {
-    const text = wrapper.querySelector('h1');
-    const center = {
+    let {offsetX: x, offsetY: y} = e;
+    if (e.target !== this) {
+      x += e.target.offsetLeft;
+      y += e.target.offsetTop;
+    }
+
+    const textCenter = {
       x: text.offsetLeft + text.offsetWidth / 2,
       y: text.offsetTop + text.offsetHeight / 2
     }
-
-    const offsetX = (e.clientX - center.x) * 0.35;
-    const offsetY = (e.clientY - center.y) * 0.75;
+    const xWalk = (x - textCenter.x) * 0.35;
+    const yWalk = (y - textCenter.y) * 0.75;
 
     text.style.textShadow = `
-      ${offsetX}px ${offsetY}px 0 rgba(255, 0, 255, 0.7),
-      ${-offsetX}px ${offsetY}px 0 rgba(0, 255, 255, 0.7),
-      ${offsetY}px ${-offsetX}px 0 rgba(0, 255, 0, 0.7),
-      ${-offsetY}px ${offsetX}px 0 rgba(0, 0, 255, 0.7)
+      ${xWalk}px ${yWalk}px 0 rgba(255, 0, 255, 0.7),
+      ${-xWalk}px ${yWalk}px 0 rgba(0, 255, 255, 0.7),
+      ${yWalk}px ${-xWalk}px 0 rgba(0, 255, 0, 0.7),
+      ${-yWalk}px ${xWalk}px 0 rgba(0, 0, 255, 0.7)
     `;
   }
 
