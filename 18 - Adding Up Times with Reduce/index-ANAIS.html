@@ -182,35 +182,21 @@
     </li>
   </ul>
 <script>
-  const videos = [...document.querySelectorAll('.videos li')];
+  const videos = [...document.querySelectorAll('.videos [data-time]')];
 
-  function calculateRunningTime(videos) {
-    const runningTime = {
-      hours: 0,
-      minutes: 0,
-      seconds: 0
-    }
+  const totalTimeInSeconds = videos
+    .map(video => video.dataset.time)
+    .map(time => {
+      const [minutes, seconds] = time.split(':').map(parseFloat);
+      return minutes * 60 + seconds;
+    })
+    .reduce((total, timeInSecodns) => total + timeInSecodns);
 
-    return videos.reduce((total, video) => {
-        [minutes, seconds] = video.dataset.time.split(':').map(s => parseInt(s));
-        total.minutes += minutes;
-        total.seconds += seconds;
+  const hours = Math.floor(totalTimeInSeconds / 3600);
+  const minutes = Math.floor((totalTimeInSeconds % 3600) / 60);
+  const seconds = (totalTimeInSeconds % 3600) % 60;
 
-        if (total.seconds >= 60) {
-          total.minutes += Math.floor(total.seconds / 60);
-          total.seconds = total.seconds % 60;
-        }
-        if (total.minutes >= 60) {
-          total.hours += Math.floor(total.minutes / 60);
-          total.minutes = total.minutes % 60;
-        }
-        return total;
-      }, runningTime);
-  }
-
-  const runningTime = calculateRunningTime(videos);
-
-  console.log(`${runningTime.hours} ${runningTime.minutes} ${runningTime.seconds}`);
+  console.log(hours, minutes, seconds);
 </script>
 </body>
 </html>
