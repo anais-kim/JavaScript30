@@ -37,6 +37,14 @@ html {
   width:200px;
 }
 
+.effect-controls label {
+  cursor: pointer;
+}
+
+.green-controls {
+  display: none;
+}
+
 /*
   Strip!
 */

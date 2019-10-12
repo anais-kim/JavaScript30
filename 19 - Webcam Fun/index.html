@@ -10,7 +10,19 @@
   <div class="photobooth">
     <div class="controls">
       <button onClick="takePhoto()">Take Photo</button>
-<!--       <div class="rgb">
+
+      <div class="effect-controls">
+        <input id="effect-none" name="effect" type="radio" value="none" checked>
+        <label for="effect-none">None</label>
+        <input id="effect-red"  name="effect" type="radio" value="red">
+        <label for="effect-red">Red Filter</label>
+        <input id="effect-rgb"  name="effect" type="radio" value="rgb">
+        <label for="effect-rgb">RGB Split</label>
+        <input id="effect-green"  name="effect" type="radio" value="green">
+        <label for="effect-green">Green Screen</label>
+      </div>
+
+      <div class="green-controls">
         <label for="rmin">Red Min:</label>
         <input type="range" min=0 max=255 name="rmin">
         <label for="rmax">Red Max:</label>
@@ -29,7 +41,7 @@
         <input type="range" min=0 max=255 name="bmin">
         <label for="bmax">Blue Max:</label>
         <input type="range" min=0 max=255 name="bmax">
-      </div> -->
+      </div>
     </div>
 
     <canvas class="photo"></canvas>
