@@ -26,14 +26,18 @@ function takePhoto() {
     const photo = {
         url: canvas.toDataURL('image/jpeg', 0.8),
         title: 'my_photo', 
-        extention: 'jpeg'
     };
 
-    strip.innerHTML += `
-        <a href=${photo.url} title="${photo.title}" download="${photo.title}.${photo.extention}">
-            <img src=${photo.url} alt=${photo.title}>
-        </a>
-    `;
+    const link = document.createElement('a');
+    link.href = photo.url;
+    link.setAttribute('download', photo.title);
+
+    const image = document.createElement('img');
+    image.src = photo.url;
+    image.alt = photo.title;
+    link.appendChild(image);
+
+    strip.insertBefore(link, strip.firstChild);
 }
 
 function redFilter(pixels) {
