@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Detection</title>
+</head>
+<body>
+
+  <div class="words" contenteditable>
+  </div>
+
+<script>
+  const words = document.querySelector('.words');
+
+  function createWordElement() {
+    const word = document.createElement('p');
+    word.classList.add('typing');
+    words.appendChild(word);
+    return word;
+  }
+  
+  function typeSpeech(e) {
+    const results = [...e.results];
+
+    const interimSpeeches = results.filter(result => !result.isFinal);
+    const word = words.querySelector('.typing') || createWordElement();
+
+    if (interimSpeeches.length > 0) {
+      word.innerText = interimSpeeches.map(speech => speech[0].transcript).join(' ');
+    } else {
+      const lastSpeech = results.pop();
+      word.innerText = lastSpeech[0].transcript;
+      word.classList.remove('typing');
+    }
+  }
+  
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  const recognition = new window.SpeechRecognition();
+  recognition.interimResults = true;
+  recognition.continuous = true;
+  recognition.start();
+  
+  recognition.addEventListener('result', typeSpeech);
+</script>
+
+
+  <style>
+    html {
+      font-size: 10px;
+    }
+
+    body {
+      background: #ffc600;
+      font-family: 'helvetica neue';
+      font-weight: 200;
+      font-size: 20px;
+    }
+
+    .words {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+      padding: 1rem 2rem 1rem 5rem;
+      background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+      background-size: 100% 3rem;
+      position: relative;
+      line-height: 3rem;
+    }
+    
+    p {
+      margin: 0 0 3rem;
+    }
+
+    .words:before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      top: 0;
+      left: 30px;
+      bottom: 0;
+      border: 1px solid;
+      border-color: transparent #efe4e4;
+    }
+  </style>
+
+</body>
+</html>
