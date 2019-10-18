@@ -33,7 +33,7 @@
       word.classList.remove('typing');
     }
   }
-  
+
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   
   const recognition = new window.SpeechRecognition();
@@ -42,6 +42,7 @@
   recognition.start();
   
   recognition.addEventListener('result', typeSpeech);
+  recognition.addEventListener('end', () => recognition.start());
 </script>
 
 
