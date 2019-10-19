@@ -38,6 +38,8 @@
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
 
+  msg.text = document.querySelector('[name="text"]').value;
+
   function populateVoiceList(e) {
     voices = synthesis.getVoices()
       .filter(voice => voice.lang.includes('en') || voice.lang.includes('ko'));
@@ -47,19 +49,29 @@
       .join('');
   }
 
-  function speak() {
+  function setVoice() {
     msg.voice = voices.find(voice => voice.voiceURI === voicesDropdown.value);
-    options.forEach(option => msg[option.name] = option.value);
-    
-    synthesis.speak(msg);
+    toggle();
+  }
+
+  function setOption() {
+    msg[this.name] = this.value;
+    toggle();
+  }
+
+  function toggle(startOver = true) {
+    synthesis.cancel();
+    if (startOver) {
+      synthesis.speak(msg);
+    }
   }
 
   synthesis.addEventListener('voiceschanged', populateVoiceList);
 
-  voicesDropdown.addEventListener('change', speak);
-  options.forEach(option => option.addEventListener('change', speak));
-  speakButton.addEventListener('click', speak);
-  stopButton.addEventListener('click', () => synthesis.cancel());
+  voicesDropdown.addEventListener('change', setVoice);
+  options.forEach(option => option.addEventListener('change', setOption));
+  speakButton.addEventListener('click', toggle);
+  stopButton.addEventListener('click', () => toggle(false));
 </script>
 
 </body>
