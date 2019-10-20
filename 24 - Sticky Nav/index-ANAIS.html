@@ -59,8 +59,10 @@ const navToggleOffset = nav.offsetTop;
 
 function toggleNavigation() {
     if (window.scrollY > navToggleOffset) {
+      document.body.style.paddingTop = nav.offsetHeight + 'px';
       nav.classList.add('fixed');
     } else {
+      document.body.style.paddingTop = 0;
       nav.classList.remove('fixed');
     }
 }
